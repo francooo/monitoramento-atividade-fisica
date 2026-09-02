@@ -303,6 +303,41 @@ export async function getProfileTotals(userId: string) {
   return row ?? { workouts: 0, distance: 0, duration: 0 };
 }
 
+export type CoachActivity = {
+  startedAt: Date;
+  kind: "corrida" | "caminhada" | "pedal" | "trilha";
+  title: string;
+  distanceMeters: number;
+  durationSeconds: number;
+  city: string | null;
+};
+
+/**
+ * Treinos recentes no formato que o chat do treinador consome. Sem `route` nem
+ * `notes`: o traçado não cabe num prompt e as anotações não mudam a leitura de
+ * volume e ritmo, que é o que se pergunta a um treinador.
+ */
+export async function getActivitiesForCoach(
+  userId: string,
+  limit = 25,
+): Promise<CoachActivity[]> {
+  const rows = await db
+    .select({
+      startedAt: activities.startedAt,
+      kind: activities.kind,
+      title: activities.title,
+      distanceMeters: activities.distanceMeters,
+      durationSeconds: activities.durationSeconds,
+      city: activities.city,
+    })
+    .from(activities)
+    .where(eq(activities.userId, userId))
+    .orderBy(desc(activities.startedAt))
+    .limit(limit);
+
+  return rows as CoachActivity[];
+}
+
 export async function getActivitiesWithRoute(userId: string, limit = 30) {
   return db
     .select({
