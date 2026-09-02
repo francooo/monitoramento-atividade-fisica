@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+/*
+ * Tokens extraídos do arquivo Figma "Dawn" (LKBE8Nrww0YwkAK9b1suNP).
+ * Os nomes descrevem o papel do valor, não a cor, para que uma troca de
+ * paleta não exija renomear nada.
+ */
+@theme {
+  --color-brand: #fc4c02;
+  --color-brand-press: #e04402;
+  --color-brand-soft: #fce3d6;
+
+  --color-ink: #16181c;
+  --color-muted: #6b7280;
+  --color-faint: #9aa0a6;
+
+  --color-line: #e7e8ea;
+  --color-line-strong: #d8dade;
+  --color-field: #f5f5f6;
+  --color-track: #ecedef;
+
+  --color-danger: #d92d20;
+
+  --radius-field: 12px;
+  --radius-card: 16px;
+  --radius-pill: 26px;
+
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: #f2f3f5;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Foco visível e consistente — o Figma não especifica, então herda a marca. */
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* O app é desenhado em 390 × 844. Em telas maiores ele fica centralizado
+   dentro dessa largura em vez de esticar e quebrar a composição. */
+.app-shell {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 390px;
+  min-height: 100dvh;
+  background: #fff;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 430px) {
+  .app-shell {
+    box-shadow: 0 0 0 1px var(--color-line);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

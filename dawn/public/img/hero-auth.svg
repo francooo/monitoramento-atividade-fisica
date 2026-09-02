@@ -1,0 +1,18 @@
+<svg width="390" height="286" viewBox="0 0 390 286" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="390" height="286" fill="#E5E5E5"/>
+<g id="02 &#194;&#183; Entrar">
+<rect width="390" height="844" fill="white"/>
+<g id="Frame" clip-path="url(#clip0_0_1)">
+<path id="Vector" d="M390 0H0V286H390V0Z" fill="#FC4C02"/>
+<path id="Vector_2" opacity="0.45" d="M318 163.973C384.274 163.973 438 112.755 438 49.5733C438 -13.608 384.274 -64.8267 318 -64.8267C251.726 -64.8267 198 -13.608 198 49.5733C198 112.755 251.726 163.973 318 163.973Z" fill="#FF6A2B"/>
+<path id="Vector_3" opacity="0.5" d="M60 373.707C137.32 373.707 200 313.952 200 240.24C200 166.528 137.32 106.773 60 106.773C-17.3199 106.773 -80 166.528 -80 240.24C-80 313.952 -17.3199 373.707 60 373.707Z" fill="#E23F00"/>
+<path id="Vector_4" opacity="0.9" d="M-20 204.013C70 160.16 118 234.52 190 177.32C250 129.653 300 143 410 91.52" stroke="white" stroke-width="6" stroke-linecap="round" stroke-dasharray="1 22"/>
+<path id="Vector_5" opacity="0.35" d="M-20 204.013C70 160.16 118 234.52 190 177.32C250 129.653 300 143 410 91.52" stroke="white" stroke-width="3" stroke-linecap="round"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_0_1">
+<rect width="390" height="286" fill="white"/>
+</clipPath>
+</defs>
+</svg>
