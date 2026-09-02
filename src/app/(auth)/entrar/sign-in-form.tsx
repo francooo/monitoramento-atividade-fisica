@@ -14,11 +14,13 @@ import { signIn, type AuthState } from "@/lib/auth-actions";
 
 const initialState: AuthState = {};
 
-export function SignInForm() {
+export function SignInForm({ oauthError }: { oauthError?: string }) {
   const [state, formAction] = useActionState(signIn, initialState);
 
   return (
     <>
+      <FormError message={oauthError} />
+
       <form action={formAction} className="flex w-full flex-col gap-[10px]">
         <Field
           name="email"
@@ -59,7 +61,9 @@ export function SignInForm() {
       <OrDivider />
 
       <div className="flex w-full flex-col gap-[10px]">
-        <OutlineButton icon="google">Continuar com Google</OutlineButton>
+        <OutlineButton icon="google" href="/api/auth/google">
+          Continuar com Google
+        </OutlineButton>
         <OutlineButton icon="apple">Continuar com Apple</OutlineButton>
       </div>
     </>

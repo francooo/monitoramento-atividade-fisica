@@ -5,8 +5,27 @@ import { SignInForm } from "./sign-in-form";
 
 export const metadata = { title: "Entrar · Dawn" };
 
+/** Motivos que o callback do Google devolve na URL, em português de tela. */
+const OAUTH_MESSAGES: Record<string, string> = {
+  "google-cancelado": "Login com Google cancelado.",
+  "google-indisponivel": "O login com Google não está configurado neste ambiente.",
+  "google-falhou": "Não foi possível entrar com o Google. Tente novamente.",
+};
+
 /** Figma: 02 · Entrar (9:2) */
-export default function EntrarPage() {
+export default async function EntrarPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ erro?: string }>;
+}) {
+  // Lido no servidor para que a mensagem já venha no HTML: quem chega aqui
+  // vindo de um login que falhou precisa ver o motivo de imediato, sem
+  // depender de o JavaScript hidratar primeiro.
+  const { erro } = await searchParams;
+  const oauthError = erro
+    ? (OAUTH_MESSAGES[erro] ?? OAUTH_MESSAGES["google-falhou"])
+    : undefined;
+
   return (
     <div className="flex flex-1 flex-col items-center bg-white">
       <div className="relative h-[286px] w-full shrink-0 overflow-hidden">
@@ -30,7 +49,7 @@ export default function EntrarPage() {
 
         <div className="h-[22px]" />
 
-        <SignInForm />
+        <SignInForm oauthError={oauthError} />
       </div>
 
       <div className="flex w-full items-center justify-center gap-[5px] pt-[10px] pb-[34px] text-[14px]">

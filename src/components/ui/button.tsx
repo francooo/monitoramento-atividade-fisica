@@ -28,22 +28,36 @@ export function SubmitButton({
   );
 }
 
-/** Botão de contorno usado no login social. */
+const OUTLINE_CLASS =
+  "flex w-full items-center justify-center gap-[9px] rounded-pill border border-line-strong bg-white py-[14px] text-[15px] font-semibold text-ink transition-colors hover:bg-field";
+
+/**
+ * Botão de contorno usado no login social. Com `href` sai como link: o fluxo
+ * OAuth começa numa navegação de verdade, que o navegador pode seguir até
+ * outro domínio — coisa que um onClick não faria melhor.
+ */
 export function OutlineButton({
   icon,
   children,
   onClick,
+  href,
 }: {
   icon: IconName;
   children: React.ReactNode;
   onClick?: () => void;
+  href?: string;
 }) {
+  if (href) {
+    return (
+      <a href={href} className={OUTLINE_CLASS}>
+        <Icon name={icon} />
+        {children}
+      </a>
+    );
+  }
+
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="flex w-full items-center justify-center gap-[9px] rounded-pill border border-line-strong bg-white py-[14px] text-[15px] font-semibold text-ink transition-colors hover:bg-field"
-    >
+    <button type="button" onClick={onClick} className={OUTLINE_CLASS}>
       <Icon name={icon} />
       {children}
     </button>

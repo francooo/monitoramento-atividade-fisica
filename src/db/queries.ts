@@ -171,6 +171,48 @@ export async function createActivity(input: {
   return row;
 }
 
+/**
+ * Usuário correspondente a uma conta do Google, criando-o na primeira vez.
+ *
+ * Quem já tem conta por senha entra na mesma conta, sem virar um cadastro
+ * duplicado: o e-mail é a identidade, e quem chama aqui só o faz depois de o
+ * Google atestar que ele é verificado. O `provider` não é sobrescrito — a
+ * pessoa continua podendo entrar pela senha que já tinha.
+ */
+export async function findOrCreateGoogleUser(input: {
+  email: string;
+  name: string;
+}): Promise<string> {
+  const email = input.email.toLowerCase();
+
+  const [existing] = await db
+    .select({ id: users.id })
+    .from(users)
+    .where(sql`lower(${users.email}) = ${email}`)
+    .limit(1);
+
+  if (existing) return existing.id;
+
+  const inserted = await db
+    .insert(users)
+    .values({ name: input.name, email, provider: "google" })
+    .onConflictDoNothing()
+    .returning({ id: users.id });
+
+  if (inserted.length > 0) return inserted[0].id;
+
+  // Corrida com outro login do mesmo e-mail: o índice único barrou a segunda
+  // inserção, e a linha que venceu é a que vale.
+  const [raced] = await db
+    .select({ id: users.id })
+    .from(users)
+    .where(sql`lower(${users.email}) = ${email}`)
+    .limit(1);
+
+  if (!raced) throw new Error("não foi possível criar o usuário do Google");
+  return raced.id;
+}
+
 export async function saveActivityPhoto(input: {
   activityId: string;
   mimeType: string;
