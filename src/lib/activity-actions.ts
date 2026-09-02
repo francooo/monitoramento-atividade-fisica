@@ -17,6 +17,17 @@ export type ActivityState = {
   fieldErrors?: Record<string, string>;
 };
 
+/** Campos que o formulário de treino sabe exibir erro. */
+const FIELDS_ON_SCREEN = new Set([
+  "title",
+  "kind",
+  "distanceKm",
+  "durationMinutes",
+  "startedAt",
+  "city",
+  "photo",
+]);
+
 export async function saveActivity(
   _prev: ActivityState,
   formData: FormData,
@@ -35,11 +46,21 @@ export async function saveActivity(
 
   if (!parsed.success) {
     const fieldErrors: Record<string, string> = {};
+    let general: string | undefined;
+
     for (const issue of parsed.error.issues) {
       const key = String(issue.path[0] ?? "form");
-      if (!fieldErrors[key]) fieldErrors[key] = issue.message;
+      if (FIELDS_ON_SCREEN.has(key)) {
+        if (!fieldErrors[key]) fieldErrors[key] = issue.message;
+      } else if (!general) {
+        // Erro num campo sem lugar na tela não tem onde aparecer, e o
+        // formulário ficaria parado sem explicação — foi assim que uma falha
+        // em `notes` derrubou todo salvamento em silêncio.
+        general = `Não foi possível salvar o treino (${key}: ${issue.message}).`;
+      }
     }
-    return { fieldErrors };
+
+    return { error: general, fieldErrors };
   }
 
   // Antes de gravar o treino: uma foto recusada aqui não deve deixar para trás

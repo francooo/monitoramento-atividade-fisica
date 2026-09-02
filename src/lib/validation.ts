@@ -34,8 +34,12 @@ export const activitySchema = z.object({
     .positive("A duração precisa ser maior que zero.")
     .max(60 * 24, "Duração acima do limite."),
   startedAt: z.coerce.date(),
-  city: z.string().trim().max(80).optional().or(z.literal("")),
-  notes: z.string().trim().max(500).optional().or(z.literal("")),
+  // `nullish`, não `optional`: `FormData.get` devolve **null** para um campo
+  // que não existe no formulário, e `optional` só aceita `undefined`. Com
+  // `optional` aqui, o formulário de treino falhava sempre na validação por
+  // causa de `notes`, que não tem campo na tela.
+  city: z.string().trim().max(80, "Cidade muito longa.").nullish(),
+  notes: z.string().trim().max(500, "Anotação muito longa.").nullish(),
 });
 
 /**
